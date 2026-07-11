@@ -599,10 +599,17 @@
       console.log("Triggering test event code 0x05...");
       
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
       
-      if (isMobile) {
+      if (isAndroid) {
         // Use Android Intent to force opening the YouTube app, skipping to 1 second
         window.location.href = "intent://www.youtube.com/watch?v=dsuJZx24V_A&t=1s#Intent;package=com.google.android.youtube;scheme=https;S.browser_fallback_url=https://www.youtube.com/watch?v=dsuJZx24V_A%26t=1s;end;";
+      } else if (isIOS) {
+        // iOS supports the youtube:// scheme directly to open the app
+        window.location.href = "youtube://www.youtube.com/watch?v=dsuJZx24V_A&t=1s";
+      } else if (isMobile) {
+        window.location.href = "https://www.youtube.com/watch?v=dsuJZx24V_A&t=1s";
       } else {
         // For PC, open clean, borderless embed version starting at 1 second to minimize ads
         window.location.href = "https://www.youtube.com/embed/dsuJZx24V_A?autoplay=1&start=1";
