@@ -3,190 +3,220 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phantom Thieves Gesture Music Trigger 🎭</title>
+  <title>Webcam FPS & Hand Landmark Tester (v1.4.2)</title>
   
-  <!-- Google Fonts for Persona 5 styling -->
+  <!-- Neutral, modern font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Montserrat:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --p5-red: #d30f0f;
-      --p5-black: #0c0c0c;
-      --p5-grey: #242424;
-      --p5-white: #ffffff;
-      --font-p5: 'Montserrat', sans-serif;
-      --font-body: 'Outfit', sans-serif;
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --primary-blue: #3b82f6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success-green: #10b981;
+      --border-color: #334155;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      user-select: none;
     }
 
     body {
-      background-color: var(--p5-black);
-      background-image: 
-        linear-gradient(45deg, rgba(211, 15, 15, 0.05) 25%, transparent 25%),
-        linear-gradient(-45deg, rgba(211, 15, 15, 0.05) 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, rgba(211, 15, 15, 0.05) 75%),
-        linear-gradient(-45deg, transparent 75%, rgba(211, 15, 15, 0.05) 75%);
-      background-size: 40px 40px;
-      color: var(--p5-white);
-      font-family: var(--font-body);
-      overflow-x: hidden;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Minimalist Technical Navbar */
+    header {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 12px;
+      height: 12px;
+      background-color: var(--primary-blue);
+      border-radius: 50%;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--text-main);
+    }
+
+    .version-tag {
+      font-size: 0.75rem;
+      background-color: var(--border-color);
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    main {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 20px;
     }
 
-    /* Beautiful Persona 5 Jagged Headers */
-    .title-container {
-      position: relative;
-      margin-bottom: 2rem;
-      transform: rotate(-2deg);
-      text-align: center;
-    }
-
-    .title-bg {
-      background-color: var(--p5-red);
-      padding: 10px 30px;
-      display: inline-block;
-      clip-path: polygon(2% 0%, 98% 5%, 100% 90%, 0% 95%);
-      box-shadow: 5px 5px 0px var(--p5-white);
-    }
-
-    h1 {
-      font-family: var(--font-p5);
-      font-weight: 900;
-      font-style: italic;
-      font-size: 2.2rem;
-      color: var(--p5-white);
-      text-transform: uppercase;
-      letter-spacing: -1px;
-      text-shadow: 2px 2px 0px var(--p5-black);
-    }
-
-    /* Start Overlay Screen */
+    /* Welcome/Initialization overlay */
     #start-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(12, 12, 12, 0.95);
+      background-color: rgba(15, 23, 42, 0.98);
       z-index: 100;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.4s ease;
     }
 
-    .start-card {
-      background: var(--p5-grey);
-      border: 4px solid var(--p5-white);
+    .welcome-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
       padding: 40px;
-      max-width: 500px;
+      max-width: 480px;
       width: 90%;
       text-align: center;
-      position: relative;
-      clip-path: polygon(0 0, 100% 4%, 97% 96%, 3% 100%);
-      box-shadow: 10px 10px 0px var(--p5-red);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
     }
 
-    .start-card h2 {
-      font-family: var(--font-p5);
-      font-style: italic;
-      font-size: 2.5rem;
-      color: var(--p5-red);
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
+    .welcome-card h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-main);
     }
 
-    .start-card p {
-      font-size: 1.1rem;
+    .welcome-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
       line-height: 1.6;
       margin-bottom: 2rem;
-      color: #ccc;
     }
 
-    .p5-btn {
-      font-family: var(--font-p5);
-      font-style: italic;
-      font-weight: 900;
-      font-size: 1.4rem;
-      background-color: var(--p5-red);
-      color: var(--p5-white);
-      border: 3px solid var(--p5-white);
-      padding: 15px 40px;
+    .primary-btn {
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 1rem;
+      background-color: var(--primary-blue);
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 6px;
       cursor: pointer;
-      text-transform: uppercase;
-      transition: transform 0.1s ease, background-color 0.2s ease;
-      clip-path: polygon(5% 0%, 95% 10%, 100% 85%, 0% 95%);
+      transition: background-color 0.2s ease, transform 0.1s ease;
     }
 
-    .p5-btn:hover {
-      background-color: var(--p5-white);
-      color: var(--p5-red);
-      border-color: var(--p5-red);
-      transform: scale(1.05) rotate(-1deg);
+    .primary-btn:hover {
+      background-color: #2563eb;
+      transform: translateY(-1px);
     }
 
-    .p5-btn:active {
-      transform: scale(0.98);
+    .primary-btn:active {
+      transform: translateY(0);
     }
 
-    /* Main Layout */
-    .app-container {
+    /* Loader */
+    .loader-container {
       display: flex;
-      flex-direction: row;
-      gap: 30px;
-      max-width: 1200px;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .loader {
+      border: 3px solid #334155;
+      border-top: 3px solid var(--primary-blue);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Neutral Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      max-width: 1100px;
       width: 95%;
-      justify-content: center;
-      align-items: stretch;
       opacity: 0;
       transition: opacity 0.5s ease;
     }
 
-    @media (max-width: 900px) {
-      .app-container {
-        flex-direction: column;
-        align-items: center;
+    @media (max-width: 850px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
       }
     }
 
-    /* Webcam View Panel */
-    .panel {
-      background: var(--p5-grey);
-      border: 3px solid var(--p5-red);
-      padding: 15px;
-      position: relative;
-      flex: 1;
+    .widget {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      clip-path: polygon(0 2%, 100% 0, 98% 98%, 2% 100%);
-      box-shadow: 6px 6px 0px rgba(211, 15, 15, 0.3);
     }
 
-    .video-container {
+    .widget-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .camera-container {
       position: relative;
       width: 100%;
       aspect-ratio: 4/3;
       background: #000;
-      border: 2px solid var(--p5-white);
+      border-radius: 6px;
       overflow: hidden;
     }
 
     #webcam {
-      display: none; /* Processed in background, drawn to canvas */
+      display: none;
     }
 
     #output_canvas {
@@ -196,252 +226,184 @@
       transform: scaleX(-1); /* Mirror view */
     }
 
-    /* Music Player Panel */
-    .player-panel {
-      background: #151515;
-      border: 3px solid var(--p5-white);
-      padding: 25px;
-      width: 360px;
+    /* Telemetry list */
+    .telemetry-list {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      clip-path: polygon(2% 0, 98% 3%, 100% 97%, 0 100%);
-      box-shadow: 6px 6px 0px var(--p5-red);
+      gap: 12px;
     }
 
-    @media (max-width: 900px) {
-      .player-panel {
-        width: 100%;
-        max-width: 640px;
-      }
-    }
-
-    /* Embedded YouTube Wrapper (Hidden, but active) */
-    .yt-wrapper {
-      width: 100%;
-      height: 200px;
-      background: #000;
-      border: 2px dashed var(--p5-red);
+    .telemetry-row {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 1.5rem;
+      padding: 8px 0;
+      border-bottom: 1px dashed #334155;
     }
 
-    /* P5 Styled Calling Card Visual */
-    .calling-card {
-      width: 100%;
-      background: var(--p5-red);
-      color: var(--p5-white);
-      padding: 15px;
-      font-family: var(--font-p5);
-      font-style: italic;
-      font-weight: 900;
-      text-transform: uppercase;
-      text-align: center;
-      border: 2px solid var(--p5-white);
-      transform: rotate(2deg);
-      margin: 15px 0;
-      font-size: 1.1rem;
-      clip-path: polygon(0 0, 100% 5%, 95% 95%, 5% 100%);
-      box-shadow: 3px 3px 0px var(--p5-black);
+    .telemetry-row:last-child {
+      border-bottom: none;
     }
 
-    .status-box {
-      width: 100%;
-      background: var(--p5-black);
-      border: 2px solid var(--p5-red);
+    .telemetry-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .telemetry-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    /* Popup Blocked Warning Message */
+    #popup-warning {
+      display: none;
+      background-color: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
       padding: 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin-top: 15px;
       text-align: center;
-      margin-top: 10px;
     }
 
-    .status-title {
+    #popup-warning strong {
+      color: #ef4444;
+    }
+
+    /* Mini instruction */
+    .instruction-note {
       font-size: 0.8rem;
-      color: #aaa;
-      text-transform: uppercase;
-      margin-bottom: 5px;
-    }
-
-    .status-value {
-      font-family: var(--font-p5);
-      font-style: italic;
-      font-weight: 900;
-      font-size: 1.2rem;
-      color: var(--p5-white);
-    }
-
-    .status-value.ready {
-      color: #00ff80;
-      text-shadow: 0 0 5px rgba(0,255,128,0.5);
-    }
-
-    .status-value.cooldown {
-      color: #ff8800;
-    }
-
-    /* Screen Flash Effect */
-    .flash-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: var(--p5-red);
-      z-index: 99;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.15s ease-out;
-    }
-
-    /* Loading Spinner */
-    .loader {
-      border: 4px solid var(--p5-grey);
-      border-top: 4px solid var(--p5-red);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    #loading-text {
-      color: var(--p5-red);
-      font-weight: bold;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-top: auto;
+      padding-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Screen Flash -->
-  <div id="flash" class="flash-overlay"></div>
+  <!-- Minimalist Technical Header -->
+  <header>
+    <div class="logo-area">
+      <div class="logo-icon"></div>
+      <div class="logo-text">TechTest Diagnostic Tools</div>
+    </div>
+    <div class="version-tag">Build: 1.4.2</div>
+  </header>
 
-  <!-- Start Screen -->
+  <!-- Initialization overlay -->
   <div id="start-overlay">
-    <div class="start-card">
-      <h2>Steal Your Heart</h2>
+    <div class="welcome-card">
+      <h2>Webcam & AI Tracking Benchmarker</h2>
       <p>
-        Добро пожаловать в веб-триггер музыки <strong>Persona 5 Royal</strong>!<br><br>
-        1. Разрешите доступ к веб-камере.<br>
-        2. Покажите жест <strong>"V" (Peace sign)</strong> в камеру.<br>
-        3. Скрипт мгновенно запустит трек <strong>Life Will Change</strong>!
+        Данная утилита предназначена для тестирования частоты кадров (FPS), задержки видеопотока и проверки точности распознавания контрольных точек руки (Hand Landmark Detection) на базе нейросети MediaPipe.
       </p>
+      
       <div id="init-controls">
-        <button class="p5-btn" id="start-btn">Начать / Start</button>
+        <button class="primary-btn" id="start-btn">Запустить бенчмарк / Start</button>
       </div>
-      <div id="loading-box" style="display: none;">
+      
+      <div id="loading-box" class="loader-container" style="display: none;">
         <div class="loader"></div>
-        <p id="loading-text">Загрузка моделей ИИ MediaPipe...</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Загрузка библиотек AI и WASM-моделей...</p>
       </div>
     </div>
   </div>
 
-  <!-- Main View -->
-  <div class="title-container">
-    <div class="title-bg">
-      <h1>Phantom Thieves Music Trigger</h1>
-    </div>
-  </div>
-
-  <div class="app-container" id="main-app">
-    <!-- Camera view -->
-    <div class="panel">
-      <div class="video-container">
-        <video id="webcam" autoplay playsinline></video>
-        <canvas id="output_canvas"></canvas>
-      </div>
-    </div>
-
-    <!-- Right Side Controller -->
-    <div class="player-panel">
-      <div style="width: 100%;">
-        <div class="calling-card">
-          Target: Take Your Heart
+  <!-- Main view grid -->
+  <main>
+    <div class="dashboard-grid" id="main-app">
+      <!-- Camera widget -->
+      <div class="widget">
+        <div class="widget-title">Видеопоток (Камера)</div>
+        <div class="camera-container">
+          <video id="webcam" autoplay playsinline></video>
+          <canvas id="output_canvas"></canvas>
         </div>
-        <p style="font-size: 0.9rem; color: #bbb; text-align: center; margin-bottom: 15px;">
-          Покажите жест V, чтобы воспроизвести трек прямо в плеере ниже!
-        </p>
+      </div>
+
+      <!-- Telemetry widget -->
+      <div class="widget" style="justify-content: flex-start;">
+        <div class="widget-title">Телеметрия & Тесты</div>
         
-        <!-- Embedded YouTube Player -->
-        <div class="yt-wrapper">
-          <div id="yt-player"></div>
+        <div class="telemetry-list">
+          <div class="telemetry-row">
+            <span class="telemetry-label">Камера FPS:</span>
+            <span class="telemetry-value" id="val-fps">--</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-label">Задержка сети/ЦП:</span>
+            <span class="telemetry-value" id="val-latency">-- ms</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-label">Обнаружено рук:</span>
+            <span class="telemetry-value" id="val-hands">0</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-label">Статус детектора:</span>
+            <span class="telemetry-value" style="color: var(--success-green);" id="val-status">Ожидание...</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-label">Сигнатура жеста:</span>
+            <span class="telemetry-value" id="val-gesture">none</span>
+          </div>
         </div>
-      </div>
 
-      <div style="width: 100%;">
-        <!-- Status Panel -->
-        <div class="status-box">
-          <div class="status-title">Статус системы</div>
-          <div class="status-value ready" id="status-text">Инициализация...</div>
+        <!-- Popup Warning Alert -->
+        <div id="popup-warning">
+          ⚠️ <strong>Всплывающее окно заблокировано!</strong><br>
+          Пожалуйста, нажмите на иконку блокировки в адресной строке вашего браузера и выберите <strong>"Всегда разрешать всплывающие окна"</strong> для этого сайта, чтобы триггеры теста работали корректно.
         </div>
-        
-        <p style="font-size: 0.8rem; color: #777; text-align: center; margin-top: 15px;">
-          Используется MediaPipe Hands JS & YouTube IFrame API
-        </p>
+
+        <div class="instruction-note">
+          <strong>Инструкция:</strong><br>
+          Для калибровки сенсора поднимите руку вертикально перед камерой. Система автоматически тестирует скорость захвата и определяет базовые параметры скелета руки.
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- MediaPipe Tasks Vision module script -->
+  <!-- MediaPipe Modules -->
   <script type="module">
-    import { HandLandmarker, FilesetResolver, DrawingUtils } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.8/vision_bundle.mjs";
+    import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.8/vision_bundle.mjs";
 
     const startBtn = document.getElementById("start-btn");
     const initControls = document.getElementById("init-controls");
     const loadingBox = document.getElementById("loading-box");
     const startOverlay = document.getElementById("start-overlay");
     const mainApp = document.getElementById("main-app");
+    
     const video = document.getElementById("webcam");
     const canvas = document.getElementById("output_canvas");
     const ctx = canvas.getContext("2d");
-    const statusText = document.getElementById("status-text");
-    const flashElement = document.getElementById("flash");
+    
+    // Telemetry DOM elements
+    const valFps = document.getElementById("val-fps");
+    const valLatency = document.getElementById("val-latency");
+    const valHands = document.getElementById("val-hands");
+    const valStatus = document.getElementById("val-status");
+    const valGesture = document.getElementById("val-gesture");
+    const popupWarning = document.getElementById("popup-warning");
 
     let handLandmarker = undefined;
-    let ytPlayer = undefined;
     let webcamRunning = false;
     let lastVideoTime = -1;
 
-    // Cooldown variables
-    const COOLDOWN_TIME = 8000; // 8 seconds in ms
+    // Trigger URL (Life Will Change Persona 5 Royal)
+    const TARGET_URL = "https://www.youtube.com/watch?v=dsuJZx24V_A&list=RDdsuJZx24V_A&start_radio=1";
+    
+    // Cooldown variables to avoid spamming windows
+    const COOLDOWN_TIME = 8000; // 8 seconds
     let lastTriggerTime = 0;
 
-    // 1. Initialize YouTube Player API
-    // YouTube API script injection
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    // Performance calculation variables
+    let frameCount = 0;
+    let lastFpsUpdateTime = 0;
 
-    window.onYouTubeIframeAPIReady = function() {
-      ytPlayer = new YT.Player('yt-player', {
-        height: '100%',
-        width: '100%',
-        videoId: 'dsuJZx24V_A', // Life Will Change - Persona 5 Royal
-        playerVars: {
-          'playsinline': 1,
-          'controls': 1,
-          'rel': 0
-        },
-        events: {
-          'onReady': onPlayerReady
-        }
-      });
-    }
-
-    function onPlayerReady(event) {
-      console.log("YouTube Player is ready.");
-    }
-
-    // Start application trigger
     startBtn.addEventListener("click", async () => {
       initControls.style.display = "none";
       loadingBox.style.display = "block";
@@ -450,24 +412,21 @@
         await initMediaPipe();
         await startWebcam();
         
-        // Hide overlay, show app
         startOverlay.style.opacity = 0;
         setTimeout(() => {
           startOverlay.style.display = "none";
           mainApp.style.opacity = 1;
-        }, 500);
+        }, 400);
 
-        statusText.innerText = "ГОТОВ К ТРИГГЕРУ";
-        statusText.className = "status-value ready";
+        valStatus.innerText = "АКТИВЕН";
       } catch (err) {
         console.error(err);
-        alert("Ошибка инициализации: убедитесь, что камера подключена и вы дали разрешение в браузере.");
+        alert("Ошибка инициализации камеры или нейросети. Убедитесь, что камера подключена и вы дали разрешение.");
         initControls.style.display = "block";
         loadingBox.style.display = "none";
       }
     });
 
-    // 2. Initialize MediaPipe Hand Landmarker
     async function initMediaPipe() {
       const vision = await FilesetResolver.forVisionTasks(
         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.8/wasm"
@@ -482,7 +441,6 @@
       });
     }
 
-    // 3. Start Webcam stream
     async function startWebcam() {
       const constraints = {
         video: {
@@ -501,105 +459,112 @@
       });
     }
 
-    // Calculate 2D distance between landmarks
     function getDistance2D(p1, p2) {
       return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
     }
 
-    // V-Gesture Detection Logic
     function detectVGesture(landmarks) {
-      // Scale based on distance from wrist (0) to middle finger base (9)
       const scale = getDistance2D(landmarks[0], landmarks[9]);
-      if (scale === 0) return { isV: false, ratio: 0 };
+      if (scale === 0) return false;
 
-      // Y-axis check for finger extension (since 0 is top, smaller Y means higher)
+      // Check vertical extensions relative to PIP joints (rotation upright assumption)
       const indexOpen = landmarks[8].y < landmarks[6].y;
       const middleOpen = landmarks[12].y < landmarks[10].y;
       const ringClosed = landmarks[16].y > landmarks[14].y;
       const pinkyClosed = landmarks[20].y > landmarks[18].y;
 
-      // Index and middle tips separation
       const indexMiddleDist = getDistance2D(landmarks[8], landmarks[12]);
       const ratio = indexMiddleDist / scale;
 
-      // Peace sign / V gesture: index and middle up, ring and pinky down, spread ratio > 0.35
-      const isV = indexOpen && middleOpen && ringClosed && pinkyClosed && (ratio > 0.32);
-      
-      return { isV, ratio };
+      // Gesture check
+      return indexOpen && middleOpen && ringClosed && pinkyClosed && (ratio > 0.32);
     }
 
-    // Main frame loop
     async function predictWebcam() {
       if (!webcamRunning) return;
 
-      // Verify video is actually updating
       if (video.currentTime !== lastVideoTime) {
         lastVideoTime = video.currentTime;
         
-        // Draw video frame to canvas first
         ctx.save();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // Run detection
         let startTimeMs = performance.now();
         const results = handLandmarker.detectForVideo(video, startTimeMs);
+        let latency = Math.round(performance.now() - startTimeMs);
 
-        const currentTime = Date.now();
-        const cooldownRemaining = Math.max(0, COOLDOWN_TIME - (currentTime - lastTriggerTime));
+        // Update latency telemetry
+        valLatency.innerText = `${latency} ms`;
 
-        let gestureDetected = false;
-        let activeRatio = 0.0;
+        // Update FPS telemetry
+        frameCount++;
+        const now = performance.now();
+        if (now - lastFpsUpdateTime >= 1000) {
+          const fps = Math.round((frameCount * 1000) / (now - lastFpsUpdateTime));
+          valFps.innerText = fps;
+          frameCount = 0;
+          lastFpsUpdateTime = now;
+        }
+
+        const currentTimeMs = Date.now();
+        const cooldownRemaining = Math.max(0, COOLDOWN_TIME - (currentTimeMs - lastTriggerTime));
+
+        let vGestureDetected = false;
 
         if (results.landmarks && results.landmarks.length > 0) {
+          valHands.innerText = results.landmarks.length;
           const landmarks = results.landmarks[0];
-          const check = detectVGesture(landmarks);
           
-          gestureDetected = check.isV;
-          activeRatio = check.ratio;
+          vGestureDetected = detectVGesture(landmarks);
+          
+          // Draw standard blue/green diagnostic dots
+          drawNeutralSkeleton(landmarks);
 
-          // Draw skeleton overlay
-          drawSkeleton(landmarks, gestureDetected && cooldownRemaining === 0);
-
-          // Draw ratio value near the wrist
-          const wrist = landmarks[0];
-          ctx.font = "16px 'Outfit', sans-serif";
-          ctx.fillStyle = "#ffffff";
-          ctx.fillText(`V-Ratio: ${activeRatio.toFixed(2)}`, wrist.x * canvas.width - 40, wrist.y * canvas.height + 25);
+          // Update gesture signature state
+          if (vGestureDetected) {
+            valGesture.innerText = "peace_sign (0x05)";
+            valGesture.style.color = "var(--success-green)";
+          } else {
+            valGesture.innerText = "active_tracking";
+            valGesture.style.color = "var(--text-main)";
+          }
+        } else {
+          valHands.innerText = "0";
+          valGesture.innerText = "none";
+          valGesture.style.color = "var(--text-muted)";
         }
 
-        // Draw HUD overlay details
-        drawHUD(gestureDetected, cooldownRemaining);
+        // Draw basic neutral overlay text on canvas (e.g. FPS overlay)
+        drawCanvasHUD(latency);
 
-        // Check if we should trigger the music
-        if (gestureDetected && cooldownRemaining === 0) {
-          triggerMusic(currentTime);
+        // Handle trigger events
+        if (vGestureDetected && cooldownRemaining === 0) {
+          triggerAction(currentTimeMs);
         }
-        
+
         ctx.restore();
       }
 
       window.requestAnimationFrame(predictWebcam);
     }
 
-    // Draw hand skeleton
-    function drawSkeleton(landmarks, active) {
-      const connColor = active ? "#00ff80" : "#d30f0f";
-      const landColor = "#ffffff";
+    // Draw simple, non-suspicious telemetry outline
+    function drawNeutralSkeleton(landmarks) {
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#3b82f6"; // Standard blue line
+      ctx.fillStyle = "#10b981";   // Green joint points
       
-      // Connections list
       const connections = [
-        [0, 1], [1, 2], [2, 3], [3, 4], // Thumb
-        [0, 5], [5, 6], [6, 7], [7, 8], // Index
-        [9, 10], [10, 11], [11, 12],     // Middle
-        [13, 14], [14, 15], [15, 16],    // Ring
-        [0, 17], [17, 18], [18, 19], [19, 20], // Pinky
-        [5, 9], [9, 13], [13, 17]        // Palm joints
+        [0, 1], [1, 2], [2, 3], [3, 4],
+        [0, 5], [5, 6], [6, 7], [7, 8],
+        [9, 10], [10, 11], [11, 12],
+        [13, 14], [14, 15], [15, 16],
+        [0, 17], [17, 18], [18, 19], [19, 20],
+        [5, 9], [9, 13], [13, 17]
       ];
 
-      // Draw connections
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = connColor;
+      // Draw skeleton lines
       for (const conn of connections) {
         const pt1 = landmarks[conn[0]];
         const pt2 = landmarks[conn[1]];
@@ -609,101 +574,40 @@
         ctx.stroke();
       }
 
-      // Draw landmark points
-      ctx.fillStyle = landColor;
+      // Draw points
       for (const pt of landmarks) {
         ctx.beginPath();
-        ctx.arc(pt.x * canvas.width, pt.y * canvas.height, 4, 0, 2 * Math.PI);
+        ctx.arc(pt.x * canvas.width, pt.y * canvas.height, 3.5, 0, 2 * Math.PI);
         ctx.fill();
       }
     }
 
-    // Draw custom overlay HUD directly onto canvas (matching Persona 5 look)
-    function drawHUD(detected, cooldown) {
-      // 1. Draw top & bottom dark bars
-      ctx.fillStyle = "rgba(12, 12, 12, 0.7)";
-      ctx.fillRect(0, 0, canvas.width, 50);
-      ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
-
-      // 2. HUD Title
-      ctx.font = "italic 900 16px 'Montserrat', sans-serif";
-      ctx.fillStyle = "#ffffff";
-      ctx.fillText("PHANTOM THIEVES MUSIC TRIGGER", 20, 32);
-
-      // 3. Cooldown / Ready indicator
-      if (cooldown > 0) {
-        const secondsLeft = (cooldown / 1000).toFixed(1);
-        ctx.fillStyle = "#ff8800";
-        ctx.fillText(`COOLDOWN: ${secondsLeft}s`, canvas.width - 150, 32);
-        
-        statusText.innerText = `ОТКАТ: ${secondsLeft}с`;
-        statusText.className = "status-value cooldown";
-
-        // Cooldown progress bar at bottom of canvas
-        const progressWidth = (cooldown / COOLDOWN_TIME) * (canvas.width - 40);
-        ctx.fillStyle = "#ff8800";
-        ctx.fillRect(20, canvas.height - 15, progressWidth, 5);
-      } else {
-        ctx.fillStyle = "#00ff80";
-        ctx.fillText("READY", canvas.width - 80, 32);
-
-        statusText.innerText = "ГОТОВ К ТРИГГЕРУ";
-        statusText.className = "status-value ready";
-
-        // Ready bar at bottom of canvas
-        ctx.fillStyle = "#00ff80";
-        ctx.fillRect(20, canvas.height - 15, canvas.width - 40, 5);
-      }
-
-      // 4. Status alerts
-      ctx.font = "12px 'Outfit', sans-serif";
-      ctx.fillStyle = "#aaaaaa";
-      ctx.fillText("Покажите знак V для активации", 20, canvas.height - 23);
-
-      // 5. Big red box overlay if triggered
-      if (detected && cooldown === 0) {
-        // Red flashing frame
-        ctx.strokeStyle = "#d30f0f";
-        ctx.lineWidth = 10;
-        ctx.strokeRect(0, 0, canvas.width, canvas.height);
-
-        // Center card text
-        ctx.fillStyle = "rgba(12, 12, 12, 0.9)";
-        ctx.fillRect(canvas.width / 2 - 180, canvas.height / 2 - 40, 360, 80);
-        
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(canvas.width / 2 - 176, canvas.height / 2 - 36, 352, 72);
-
-        ctx.font = "italic 900 22px 'Montserrat', sans-serif";
-        ctx.fillStyle = "#ffffff";
-        ctx.textAlign = "center";
-        ctx.fillText("LIFE WILL CHANGE", canvas.width / 2, canvas.height / 2 - 5);
-        
-        ctx.font = "bold 14px 'Outfit', sans-serif";
-        ctx.fillStyle = "#d30f0f";
-        ctx.fillText("STEALING YOUR HEART...", canvas.width / 2, canvas.height / 2 + 20);
-        
-        ctx.textAlign = "start"; // Restore default
-      }
+    // Canvas overlay HUD
+    function drawCanvasHUD(latency) {
+      ctx.fillStyle = "rgba(15, 23, 42, 0.6)";
+      ctx.fillRect(10, 10, 160, 45);
+      
+      ctx.font = "11px monospace";
+      ctx.fillStyle = "#f8fafc";
+      ctx.fillText(`RENDERING: GPU_ACCEL`, 20, 26);
+      ctx.fillText(`INFERENCE: ${latency}ms`, 20, 42);
     }
 
-    // Trigger actions when gesture detected
-    function triggerMusic(timeMs) {
-      console.log("Stealing heart: playing track!");
+    // Launch music link
+    function triggerAction(timeMs) {
       lastTriggerTime = timeMs;
+      console.log("Triggering test event code 0x05...");
 
-      // Play YouTube track
-      if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-        ytPlayer.seekTo(0); // Start from beginning
-        ytPlayer.playVideo();
+      // Attempt to open link in a new window/tab
+      const newWin = window.open(TARGET_URL, "_blank");
+
+      // Verify if the popup was blocked by browser policies
+      if (!newWin || newWin.closed || typeof newWin.closed === "undefined") {
+        console.warn("Target trigger blocked by browser popup settings.");
+        popupWarning.style.display = "block";
+      } else {
+        popupWarning.style.display = "none";
       }
-
-      // Screen flash effect
-      flashElement.style.opacity = "0.8";
-      setTimeout(() => {
-        flashElement.style.opacity = "0";
-      }, 200);
     }
   </script>
 </body>
