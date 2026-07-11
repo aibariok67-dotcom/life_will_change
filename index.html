@@ -601,18 +601,8 @@
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
       if (isMobile) {
-        const isAndroid = /Android/i.test(navigator.userAgent);
-        if (isAndroid) {
-          // Android Intent: forces opening in official YouTube app, bypassing Chrome security blocks
-          window.location.href = "intent://www.youtube.com/watch?v=dsuJZx24V_A#Intent;package=com.google.android.youtube;scheme=https;end";
-        } else {
-          // iOS deep link: standard YouTube app URL scheme
-          window.location.href = "youtube://watch?v=dsuJZx24V_A";
-          // Safe fallback for iOS (3 seconds to give the OS time to prompt)
-          setTimeout(() => {
-            window.location.href = "https://www.youtube.com/watch?v=dsuJZx24V_A";
-          }, 3000);
-        }
+        // Direct redirect to YouTube app scheme. No fallback timeout to prevent browser interference.
+        window.location.href = "youtube://www.youtube.com/watch?v=dsuJZx24V_A";
       } else {
         // For PC, open clean, borderless embed version starting at 1 second to minimize ads
         window.location.href = "https://www.youtube.com/embed/dsuJZx24V_A?autoplay=1&start=1";
