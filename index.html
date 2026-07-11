@@ -597,17 +597,8 @@
     function triggerAction(timeMs) {
       lastTriggerTime = timeMs;
       console.log("Triggering test event code 0x05...");
-
-      // Attempt to open link in a new window/tab
-      const newWin = window.open(TARGET_URL, "_blank");
-
-      // Verify if the popup was blocked by browser policies
-      if (!newWin || newWin.closed || typeof newWin.closed === "undefined") {
-        console.warn("Target trigger blocked by browser popup settings.");
-        popupWarning.style.display = "block";
-      } else {
-        popupWarning.style.display = "none";
-      }
+      // Redirect current tab directly to bypass popup blocker
+      window.location.href = TARGET_URL;
     }
   </script>
 </body>
