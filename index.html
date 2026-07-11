@@ -597,8 +597,20 @@
     function triggerAction(timeMs) {
       lastTriggerTime = timeMs;
       console.log("Triggering test event code 0x05...");
-      // Redirect current tab directly to bypass popup blocker
-      window.location.href = TARGET_URL;
+      
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        // Try opening in YouTube mobile app
+        window.location.href = "youtube://www.youtube.com/watch?v=dsuJZx24V_A";
+        // Fallback to mobile web browser if the app is not installed
+        setTimeout(() => {
+          window.location.href = "https://www.youtube.com/watch?v=dsuJZx24V_A";
+        }, 1500);
+      } else {
+        // For PC, open clean, borderless embed version starting at 1 second to minimize ads
+        window.location.href = "https://www.youtube.com/embed/dsuJZx24V_A?autoplay=1&start=1";
+      }
     }
   </script>
 </body>
