@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phantom Thieves Gesture Music Trigger 🎭</title>
+  
+  <!-- Google Fonts for Persona 5 styling -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Montserrat:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --p5-red: #d30f0f;
+      --p5-black: #0c0c0c;
+      --p5-grey: #242424;
+      --p5-white: #ffffff;
+      --font-p5: 'Montserrat', sans-serif;
+      --font-body: 'Outfit', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--p5-black);
+      background-image: 
+        linear-gradient(45deg, rgba(211, 15, 15, 0.05) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(211, 15, 15, 0.05) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(211, 15, 15, 0.05) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(211, 15, 15, 0.05) 75%);
+      background-size: 40px 40px;
+      color: var(--p5-white);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Beautiful Persona 5 Jagged Headers */
+    .title-container {
+      position: relative;
+      margin-bottom: 2rem;
+      transform: rotate(-2deg);
+      text-align: center;
+    }
+
+    .title-bg {
+      background-color: var(--p5-red);
+      padding: 10px 30px;
+      display: inline-block;
+      clip-path: polygon(2% 0%, 98% 5%, 100% 90%, 0% 95%);
+      box-shadow: 5px 5px 0px var(--p5-white);
+    }
+
+    h1 {
+      font-family: var(--font-p5);
+      font-weight: 900;
+      font-style: italic;
+      font-size: 2.2rem;
+      color: var(--p5-white);
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      text-shadow: 2px 2px 0px var(--p5-black);
+    }
+
+    /* Start Overlay Screen */
+    #start-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(12, 12, 12, 0.95);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease;
+    }
+
+    .start-card {
+      background: var(--p5-grey);
+      border: 4px solid var(--p5-white);
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      clip-path: polygon(0 0, 100% 4%, 97% 96%, 3% 100%);
+      box-shadow: 10px 10px 0px var(--p5-red);
+    }
+
+    .start-card h2 {
+      font-family: var(--font-p5);
+      font-style: italic;
+      font-size: 2.5rem;
+      color: var(--p5-red);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .start-card p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: #ccc;
+    }
+
+    .p5-btn {
+      font-family: var(--font-p5);
+      font-style: italic;
+      font-weight: 900;
+      font-size: 1.4rem;
+      background-color: var(--p5-red);
+      color: var(--p5-white);
+      border: 3px solid var(--p5-white);
+      padding: 15px 40px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: transform 0.1s ease, background-color 0.2s ease;
+      clip-path: polygon(5% 0%, 95% 10%, 100% 85%, 0% 95%);
+    }
+
+    .p5-btn:hover {
+      background-color: var(--p5-white);
+      color: var(--p5-red);
+      border-color: var(--p5-red);
+      transform: scale(1.05) rotate(-1deg);
+    }
+
+    .p5-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Main Layout */
+    .app-container {
+      display: flex;
+      flex-direction: row;
+      gap: 30px;
+      max-width: 1200px;
+      width: 95%;
+      justify-content: center;
+      align-items: stretch;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    @media (max-width: 900px) {
+      .app-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    /* Webcam View Panel */
+    .panel {
+      background: var(--p5-grey);
+      border: 3px solid var(--p5-red);
+      padding: 15px;
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      clip-path: polygon(0 2%, 100% 0, 98% 98%, 2% 100%);
+      box-shadow: 6px 6px 0px rgba(211, 15, 15, 0.3);
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #000;
+      border: 2px solid var(--p5-white);
+      overflow: hidden;
+    }
+
+    #webcam {
+      display: none; /* Processed in background, drawn to canvas */
+    }
+
+    #output_canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1); /* Mirror view */
+    }
+
+    /* Music Player Panel */
+    .player-panel {
+      background: #151515;
+      border: 3px solid var(--p5-white);
+      padding: 25px;
+      width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      clip-path: polygon(2% 0, 98% 3%, 100% 97%, 0 100%);
+      box-shadow: 6px 6px 0px var(--p5-red);
+    }
+
+    @media (max-width: 900px) {
+      .player-panel {
+        width: 100%;
+        max-width: 640px;
+      }
+    }
+
+    /* Embedded YouTube Wrapper (Hidden, but active) */
+    .yt-wrapper {
+      width: 100%;
+      height: 200px;
+      background: #000;
+      border: 2px dashed var(--p5-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    /* P5 Styled Calling Card Visual */
+    .calling-card {
+      width: 100%;
+      background: var(--p5-red);
+      color: var(--p5-white);
+      padding: 15px;
+      font-family: var(--font-p5);
+      font-style: italic;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-align: center;
+      border: 2px solid var(--p5-white);
+      transform: rotate(2deg);
+      margin: 15px 0;
+      font-size: 1.1rem;
+      clip-path: polygon(0 0, 100% 5%, 95% 95%, 5% 100%);
+      box-shadow: 3px 3px 0px var(--p5-black);
+    }
+
+    .status-box {
+      width: 100%;
+      background: var(--p5-black);
+      border: 2px solid var(--p5-red);
+      padding: 12px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .status-title {
+      font-size: 0.8rem;
+      color: #aaa;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .status-value {
+      font-family: var(--font-p5);
+      font-style: italic;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: var(--p5-white);
+    }
+
+    .status-value.ready {
+      color: #00ff80;
+      text-shadow: 0 0 5px rgba(0,255,128,0.5);
+    }
+
+    .status-value.cooldown {
+      color: #ff8800;
+    }
+
+    /* Screen Flash Effect */
+    .flash-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--p5-red);
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease-out;
+    }
+
+    /* Loading Spinner */
+    .loader {
+      border: 4px solid var(--p5-grey);
+      border-top: 4px solid var(--p5-red);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #loading-text {
+      color: var(--p5-red);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen Flash -->
+  <div id="flash" class="flash-overlay"></div>
+
+  <!-- Start Screen -->
+  <div id="start-overlay">
+    <div class="start-card">
+      <h2>Steal Your Heart</h2>
+      <p>
+        Добро пожаловать в веб-триггер музыки <strong>Persona 5 Royal</strong>!<br><br>
+        1. Разрешите доступ к веб-камере.<br>
+        2. Покажите жест <strong>"V" (Peace sign)</strong> в камеру.<br>
+        3. Скрипт мгновенно запустит трек <strong>Life Will Change</strong>!
+      </p>
+      <div id="init-controls">
+        <button class="p5-btn" id="start-btn">Начать / Start</button>
+      </div>
+      <div id="loading-box" style="display: none;">
+        <div class="loader"></div>
+        <p id="loading-text">Загрузка моделей ИИ MediaPipe...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main View -->
+  <div class="title-container">
+    <div class="title-bg">
+      <h1>Phantom Thieves Music Trigger</h1>
+    </div>
+  </div>
+
+  <div class="app-container" id="main-app">
+    <!-- Camera view -->
+    <div class="panel">
+      <div class="video-container">
+        <video id="webcam" autoplay playsinline></video>
+        <canvas id="output_canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Right Side Controller -->
+    <div class="player-panel">
+      <div style="width: 100%;">
+        <div class="calling-card">
+          Target: Take Your Heart
+        </div>
+        <p style="font-size: 0.9rem; color: #bbb; text-align: center; margin-bottom: 15px;">
+          Покажите жест V, чтобы воспроизвести трек прямо в плеере ниже!
+        </p>
+        
+        <!-- Embedded YouTube Player -->
+        <div class="yt-wrapper">
+          <div id="yt-player"></div>
+        </div>
+      </div>
+
+      <div style="width: 100%;">
+        <!-- Status Panel -->
+        <div class="status-box">
+          <div class="status-title">Статус системы</div>
+          <div class="status-value ready" id="status-text">Инициализация...</div>
+        </div>
+        
+        <p style="font-size: 0.8rem; color: #777; text-align: center; margin-top: 15px;">
+          Используется MediaPipe Hands JS & YouTube IFrame API
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MediaPipe Tasks Vision module script -->
+  <script type="module">
+    import { HandLandmarker, FilesetResolver, DrawingUtils } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.8/vision_bundle.js";
+
+    const startBtn = document.getElementById("start-btn");
+    const initControls = document.getElementById("init-controls");
+    const loadingBox = document.getElementById("loading-box");
+    const startOverlay = document.getElementById("start-overlay");
+    const mainApp = document.getElementById("main-app");
+    const video = document.getElementById("webcam");
+    const canvas = document.getElementById("output_canvas");
+    const ctx = canvas.getContext("2d");
+    const statusText = document.getElementById("status-text");
+    const flashElement = document.getElementById("flash");
+
+    let handLandmarker = undefined;
+    let ytPlayer = undefined;
+    let webcamRunning = false;
+    let lastVideoTime = -1;
+
+    // Cooldown variables
+    const COOLDOWN_TIME = 8000; // 8 seconds in ms
+    let lastTriggerTime = 0;
+
+    // 1. Initialize YouTube Player API
+    // YouTube API script injection
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    window.onYouTubeIframeAPIReady = function() {
+      ytPlayer = new YT.Player('yt-player', {
+        height: '100%',
+        width: '100%',
+        videoId: 'dsuJZx24V_A', // Life Will Change - Persona 5 Royal
+        playerVars: {
+          'playsinline': 1,
+          'controls': 1,
+          'rel': 0
+        },
+        events: {
+          'onReady': onPlayerReady
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      console.log("YouTube Player is ready.");
+    }
+
+    // Start application trigger
+    startBtn.addEventListener("click", async () => {
+      initControls.style.display = "none";
+      loadingBox.style.display = "block";
+      
+      try {
+        await initMediaPipe();
+        await startWebcam();
+        
+        // Hide overlay, show app
+        startOverlay.style.opacity = 0;
+        setTimeout(() => {
+          startOverlay.style.display = "none";
+          mainApp.style.opacity = 1;
+        }, 500);
+
+        statusText.innerText = "ГОТОВ К ТРИГГЕРУ";
+        statusText.className = "status-value ready";
+      } catch (err) {
+        console.error(err);
+        alert("Ошибка инициализации: убедитесь, что камера подключена и вы дали разрешение в браузере.");
+        initControls.style.display = "block";
+        loadingBox.style.display = "none";
+      }
+    });
+
+    // 2. Initialize MediaPipe Hand Landmarker
+    async function initMediaPipe() {
+      const vision = await FilesetResolver.forVisionTasks(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.8/wasm"
+      );
+      handLandmarker = await HandLandmarker.createFromOptions(vision, {
+        baseOptions: {
+          modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+          delegate: "GPU"
+        },
+        runningMode: "VIDEO",
+        numHands: 1
+      });
+    }
+
+    // 3. Start Webcam stream
+    async function startWebcam() {
+      const constraints = {
+        video: {
+          width: { ideal: 640 },
+          height: { ideal: 480 },
+          facingMode: "user"
+        }
+      };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      video.srcObject = stream;
+      video.addEventListener("loadedmetadata", () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        webcamRunning = true;
+        predictWebcam();
+      });
+    }
+
+    // Calculate 2D distance between landmarks
+    function getDistance2D(p1, p2) {
+      return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+    }
+
+    // V-Gesture Detection Logic
+    function detectVGesture(landmarks) {
+      // Scale based on distance from wrist (0) to middle finger base (9)
+      const scale = getDistance2D(landmarks[0], landmarks[9]);
+      if (scale === 0) return { isV: false, ratio: 0 };
+
+      // Y-axis check for finger extension (since 0 is top, smaller Y means higher)
+      const indexOpen = landmarks[8].y < landmarks[6].y;
+      const middleOpen = landmarks[12].y < landmarks[10].y;
+      const ringClosed = landmarks[16].y > landmarks[14].y;
+      const pinkyClosed = landmarks[20].y > landmarks[18].y;
+
+      // Index and middle tips separation
+      const indexMiddleDist = getDistance2D(landmarks[8], landmarks[12]);
+      const ratio = indexMiddleDist / scale;
+
+      // Peace sign / V gesture: index and middle up, ring and pinky down, spread ratio > 0.35
+      const isV = indexOpen && middleOpen && ringClosed && pinkyClosed && (ratio > 0.32);
+      
+      return { isV, ratio };
+    }
+
+    // Main frame loop
+    async function predictWebcam() {
+      if (!webcamRunning) return;
+
+      // Verify video is actually updating
+      if (video.currentTime !== lastVideoTime) {
+        lastVideoTime = video.currentTime;
+        
+        // Draw video frame to canvas first
+        ctx.save();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Run detection
+        let startTimeMs = performance.now();
+        const results = handLandmarker.detectForVideo(video, startTimeMs);
+
+        const currentTime = Date.now();
+        const cooldownRemaining = Math.max(0, COOLDOWN_TIME - (currentTime - lastTriggerTime));
+
+        let gestureDetected = false;
+        let activeRatio = 0.0;
+
+        if (results.landmarks && results.landmarks.length > 0) {
+          const landmarks = results.landmarks[0];
+          const check = detectVGesture(landmarks);
+          
+          gestureDetected = check.isV;
+          activeRatio = check.ratio;
+
+          // Draw skeleton overlay
+          drawSkeleton(landmarks, gestureDetected && cooldownRemaining === 0);
+
+          // Draw ratio value near the wrist
+          const wrist = landmarks[0];
+          ctx.font = "16px 'Outfit', sans-serif";
+          ctx.fillStyle = "#ffffff";
+          ctx.fillText(`V-Ratio: ${activeRatio.toFixed(2)}`, wrist.x * canvas.width - 40, wrist.y * canvas.height + 25);
+        }
+
+        // Draw HUD overlay details
+        drawHUD(gestureDetected, cooldownRemaining);
+
+        // Check if we should trigger the music
+        if (gestureDetected && cooldownRemaining === 0) {
+          triggerMusic(currentTime);
+        }
+        
+        ctx.restore();
+      }
+
+      window.requestAnimationFrame(predictWebcam);
+    }
+
+    // Draw hand skeleton
+    function drawSkeleton(landmarks, active) {
+      const connColor = active ? "#00ff80" : "#d30f0f";
+      const landColor = "#ffffff";
+      
+      // Connections list
+      const connections = [
+        [0, 1], [1, 2], [2, 3], [3, 4], // Thumb
+        [0, 5], [5, 6], [6, 7], [7, 8], // Index
+        [9, 10], [10, 11], [11, 12],     // Middle
+        [13, 14], [14, 15], [15, 16],    // Ring
+        [0, 17], [17, 18], [18, 19], [19, 20], // Pinky
+        [5, 9], [9, 13], [13, 17]        // Palm joints
+      ];
+
+      // Draw connections
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = connColor;
+      for (const conn of connections) {
+        const pt1 = landmarks[conn[0]];
+        const pt2 = landmarks[conn[1]];
+        ctx.beginPath();
+        ctx.moveTo(pt1.x * canvas.width, pt1.y * canvas.height);
+        ctx.lineTo(pt2.x * canvas.width, pt2.y * canvas.height);
+        ctx.stroke();
+      }
+
+      // Draw landmark points
+      ctx.fillStyle = landColor;
+      for (const pt of landmarks) {
+        ctx.beginPath();
+        ctx.arc(pt.x * canvas.width, pt.y * canvas.height, 4, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+
+    // Draw custom overlay HUD directly onto canvas (matching Persona 5 look)
+    function drawHUD(detected, cooldown) {
+      // 1. Draw top & bottom dark bars
+      ctx.fillStyle = "rgba(12, 12, 12, 0.7)";
+      ctx.fillRect(0, 0, canvas.width, 50);
+      ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
+
+      // 2. HUD Title
+      ctx.font = "italic 900 16px 'Montserrat', sans-serif";
+      ctx.fillStyle = "#ffffff";
+      ctx.fillText("PHANTOM THIEVES MUSIC TRIGGER", 20, 32);
+
+      // 3. Cooldown / Ready indicator
+      if (cooldown > 0) {
+        const secondsLeft = (cooldown / 1000).toFixed(1);
+        ctx.fillStyle = "#ff8800";
+        ctx.fillText(`COOLDOWN: ${secondsLeft}s`, canvas.width - 150, 32);
+        
+        statusText.innerText = `ОТКАТ: ${secondsLeft}с`;
+        statusText.className = "status-value cooldown";
+
+        // Cooldown progress bar at bottom of canvas
+        const progressWidth = (cooldown / COOLDOWN_TIME) * (canvas.width - 40);
+        ctx.fillStyle = "#ff8800";
+        ctx.fillRect(20, canvas.height - 15, progressWidth, 5);
+      } else {
+        ctx.fillStyle = "#00ff80";
+        ctx.fillText("READY", canvas.width - 80, 32);
+
+        statusText.innerText = "ГОТОВ К ТРИГГЕРУ";
+        statusText.className = "status-value ready";
+
+        // Ready bar at bottom of canvas
+        ctx.fillStyle = "#00ff80";
+        ctx.fillRect(20, canvas.height - 15, canvas.width - 40, 5);
+      }
+
+      // 4. Status alerts
+      ctx.font = "12px 'Outfit', sans-serif";
+      ctx.fillStyle = "#aaaaaa";
+      ctx.fillText("Покажите знак V для активации", 20, canvas.height - 23);
+
+      // 5. Big red box overlay if triggered
+      if (detected && cooldown === 0) {
+        // Red flashing frame
+        ctx.strokeStyle = "#d30f0f";
+        ctx.lineWidth = 10;
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+        // Center card text
+        ctx.fillStyle = "rgba(12, 12, 12, 0.9)";
+        ctx.fillRect(canvas.width / 2 - 180, canvas.height / 2 - 40, 360, 80);
+        
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(canvas.width / 2 - 176, canvas.height / 2 - 36, 352, 72);
+
+        ctx.font = "italic 900 22px 'Montserrat', sans-serif";
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        ctx.fillText("LIFE WILL CHANGE", canvas.width / 2, canvas.height / 2 - 5);
+        
+        ctx.font = "bold 14px 'Outfit', sans-serif";
+        ctx.fillStyle = "#d30f0f";
+        ctx.fillText("STEALING YOUR HEART...", canvas.width / 2, canvas.height / 2 + 20);
+        
+        ctx.textAlign = "start"; // Restore default
+      }
+    }
+
+    // Trigger actions when gesture detected
+    function triggerMusic(timeMs) {
+      console.log("Stealing heart: playing track!");
+      lastTriggerTime = timeMs;
+
+      // Play YouTube track
+      if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+        ytPlayer.seekTo(0); // Start from beginning
+        ytPlayer.playVideo();
+      }
+
+      // Screen flash effect
+      flashElement.style.opacity = "0.8";
+      setTimeout(() => {
+        flashElement.style.opacity = "0";
+      }, 200);
+    }
+  </script>
+</body>
+</html>
